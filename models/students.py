@@ -36,6 +36,22 @@ class StudentApi(Resource):
     def get(self, student_id):
         return Student.query.get_or_404(student_id)
 
+    def delete(self, student_id):
+        s = Student.query.get_or_404(student_id)
+        db.session.delete(s)
+        db.session.commit()
+        return {'success': True}
+
+    @marshal_with(fields)
+    def put(self, student_id):
+        s = Student.query.get_or_404(student_id)
+        args = parser.parse_args()
+        for k, v in args.items():
+            s.__setattr__(k, v)
+        db.session.merge(s)
+        db.session.commit()
+        return s
+
 
 class StudentListApi(Resource):
     @marshal_with(fields)
