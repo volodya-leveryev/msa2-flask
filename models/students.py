@@ -1,6 +1,5 @@
-from flask import request
-from flask_restful import Resource, fields, marshal_with, reqparse
-from models import db
+from flask_restful import fields, reqparse
+from models import db, ObjectApi, ObjectListApi
 
 
 class Student(db.Model):
@@ -32,39 +31,14 @@ parser.add_argument('first_name', type=str, required=True)
 parser.add_argument('second_name', type=str)
 parser.add_argument('number', type=str, required=True)
 
-class StudentApi(Resource):
-    @marshal_with(fields)
-    def get(self, student_id):
-        return Student.query.get_or_404(student_id)
 
-    def delete(self, student_id):
-        s = Student.query.get_or_404(student_id)
-        db.session.delete(s)
-        db.session.commit()
-        return {'success': True}
-
-    @marshal_with(fields)
-    def put(self, student_id):
-        s = Student.query.get_or_404(student_id)
-        args = parser.parse_args()
-        for k, v in args.items():
-            s.__setattr__(k, v)
-        db.session.merge(s)
-        db.session.commit()
-        return s
+class StudentApi(ObjectApi):
+    model_cls = Student
+    fields = fields
+    parser = parser
 
 
-class StudentListApi(Resource):
-    @marshal_with(fields)
-    def get(self):
-        size, page = 20, int(request.args.get('p', 0))
-        print(size * page)
-        return Student.query.offset(size * page).limit(size).all()
-
-    @marshal_with(fields)
-    def post(self):
-        args = parser.parse_args()
-        s = Student(**args)
-        db.session.add(s)
-        db.session.commit()
-        return s
+class StudentListApi(ObjectListApi):
+    model_cls = Student
+    fields = fields
+    parser = parser
