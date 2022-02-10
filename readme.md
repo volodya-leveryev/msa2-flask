@@ -1,9 +1,9 @@
-# Flask-RestFul framework example project
+# Flask-RestFul example project
 
 ## Как начать работу
 
 ```
-git clone https://github.com/volodya-leveryev/msa2-flask.git
+git clone https://github.com/volodya-leveryev/msa2-flask
 cd msa2-flask
 python -m venv venv
 venv\scripts\activate.bat
