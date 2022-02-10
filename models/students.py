@@ -1,3 +1,4 @@
+from flask import request
 from flask_restful import Resource, fields, marshal_with, reqparse
 from models import db
 
@@ -56,7 +57,9 @@ class StudentApi(Resource):
 class StudentListApi(Resource):
     @marshal_with(fields)
     def get(self):
-        return Student.query.all()
+        size, page = 20, int(request.args.get('p', 0))
+        print(size * page)
+        return Student.query.offset(size * page).limit(size).all()
 
     @marshal_with(fields)
     def post(self):

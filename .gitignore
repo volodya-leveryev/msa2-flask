@@ -1,4 +1,5 @@
 *.db
 *.pyc
+secret_key
 migrations/
 venv/
