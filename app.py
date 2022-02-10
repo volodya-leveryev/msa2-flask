@@ -11,4 +11,5 @@ db.init_app(app)
 Migrate(app, db)
 
 api = Api(app)
-api.add_resource(students.StudentApi, '/')
+api.add_resource(students.StudentApi, '/<int:student_id>/')
+api.add_resource(students.StudentListApi, '/')

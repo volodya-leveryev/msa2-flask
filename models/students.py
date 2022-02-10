@@ -1,4 +1,4 @@
-from flask_restful import Resource, fields, marshal_with
+from flask_restful import Resource, fields, marshal_with, reqparse
 from models import db
 
 
@@ -16,7 +16,8 @@ class Student(db.Model):
         return res
 
 
-student_fields = {
+fields = {
+    'id': fields.Integer,
     'last_name': fields.String,
     'first_name': fields.String,
     'second_name': fields.String,
@@ -24,7 +25,27 @@ student_fields = {
 }
 
 
+parser = reqparse.RequestParser()
+parser.add_argument('last_name', type=str, required=True)
+parser.add_argument('first_name', type=str, required=True)
+parser.add_argument('second_name', type=str)
+parser.add_argument('number', type=str, required=True)
+
 class StudentApi(Resource):
-    @marshal_with(student_fields)
+    @marshal_with(fields)
+    def get(self, student_id):
+        return Student.query.get_or_404(student_id)
+
+
+class StudentListApi(Resource):
+    @marshal_with(fields)
     def get(self):
         return Student.query.all()
+
+    @marshal_with(fields)
+    def post(self):
+        args = parser.parse_args()
+        s = Student(**args)
+        db.session.add(s)
+        db.session.commit()
+        return s
