@@ -19,3 +19,11 @@ flask run
 flask db migrate
 flask db upgrade
 ``````
+
+Для конвертирования формата Postman:
+
+```
+python postman.py > postman1.json
+npm install postman-collection-transformer
+node_modules/.bin/postman-collection-transformer convert -i postman1.json -o postman2.json -j 1.0.0 -p 2.0.0 -P
+```

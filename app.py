@@ -17,6 +17,7 @@ def get_secret_key():
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = get_secret_key()
+app.config['SERVER_NAME'] = 'localhost:5000'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)

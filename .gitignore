@@ -1,5 +1,7 @@
 *.db
+*.json
 *.pyc
 secret_key
 migrations/
+node_modules/
 venv/
