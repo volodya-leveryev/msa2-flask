@@ -2,4 +2,4 @@ flask
 flask-sqlalchemy
 flask-admin
 flask-migrate
-flask-restful
+flask-restx

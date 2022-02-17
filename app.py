@@ -2,7 +2,7 @@ from flask import Flask
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_migrate import Migrate
-from flask_restful import Api
+from flask_restx import Api
 
 from models import db, course, students
 

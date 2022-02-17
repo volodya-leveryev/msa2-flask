@@ -1,4 +1,4 @@
-from flask_restful import fields, reqparse
+from flask_restx import fields, reqparse
 from models import db, ObjectApi, ObjectListApi
 
 

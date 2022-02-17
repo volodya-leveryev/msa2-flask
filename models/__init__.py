@@ -1,5 +1,5 @@
 from flask import request
-from flask_restful import Resource, marshal, reqparse
+from flask_restx import Resource, marshal, reqparse
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
