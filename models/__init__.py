@@ -1,7 +1,8 @@
 from flask import request
-from flask_restx import Resource, marshal, reqparse
+from flask_restx import Api, Resource, marshal, reqparse
 from flask_sqlalchemy import SQLAlchemy
 
+api = Api()
 db = SQLAlchemy()
 
 
@@ -35,6 +36,10 @@ class ObjectListApi(Resource):
     fields = {}
     parser = reqparse.RequestParser()
 
+    @api.doc(params={'p': {
+        'description': 'Page number, positive integer number',
+        'type': 'int',
+    }})
     def get(self):
         size, page = 20, int(request.args.get('p', 0))
         print(size * page)

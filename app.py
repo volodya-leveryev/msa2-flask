@@ -2,9 +2,8 @@ from flask import Flask
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_migrate import Migrate
-from flask_restx import Api
 
-from models import db, course, students
+from models import api, db, course, students
 
 
 def get_secret_key():
@@ -27,7 +26,7 @@ admin = Admin(app)
 admin.add_view(ModelView(students.Student, db.session))
 admin.add_view(ModelView(course.Course, db.session))
 
-api = Api(app)
+api.init_app(app)
 api.add_resource(students.StudentApi, '/students/<int:obj_id>/')
 api.add_resource(students.StudentListApi, '/students/')
 api.add_resource(course.CourseApi, '/course/<int:obj_id>/')
