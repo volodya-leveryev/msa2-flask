@@ -3,7 +3,7 @@ from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_migrate import Migrate
 
-from models import api, db, course, students, task
+from models import api, db, course, students, task, solution
 
 
 def get_secret_key():
@@ -35,3 +35,4 @@ api.add_resource(course.CourseApi, '/course/<int:obj_id>/')
 api.add_resource(course.CourseListApi, '/course/')
 api.add_resource(task.TaskApi, '/task/<int:obj_id>/')
 api.add_resource(task.TaskListApi, '/task/')
+api.add_resource(solution.SolutionListApi, '/solutions/')

@@ -1,6 +1,6 @@
+celery[redis]
 flask
 flask-sqlalchemy
 flask-admin
 flask-migrate
 flask-restx
-redis
