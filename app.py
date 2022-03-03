@@ -3,7 +3,7 @@ from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_migrate import Migrate
 
-from models import api, db, course, students
+from models import api, db, course, students, task
 
 
 def get_secret_key():
@@ -26,9 +26,12 @@ Migrate(app, db)
 admin = Admin(app)
 admin.add_view(ModelView(students.Student, db.session))
 admin.add_view(ModelView(course.Course, db.session))
+admin.add_view(ModelView(task.Task, db.session))
 
 api.init_app(app)
 api.add_resource(students.StudentApi, '/students/<int:obj_id>/')
 api.add_resource(students.StudentListApi, '/students/')
 api.add_resource(course.CourseApi, '/course/<int:obj_id>/')
 api.add_resource(course.CourseListApi, '/course/')
+api.add_resource(task.TaskApi, '/task/<int:obj_id>/')
+api.add_resource(task.TaskListApi, '/task/')
