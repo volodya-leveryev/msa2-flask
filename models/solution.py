@@ -3,15 +3,13 @@
 Получение списка решений в очереди (GET)
 Получение оценки по решению в очереди (GET id)
 """
-from datetime import datetime
-
 from flask import request
 from flask_restx import Resource, marshal, reqparse, fields
-from redis import Redis
 
 from tasks import process_solution
 
 from . import api_key_required
+from .solution_model import Solution
 
 fields = {
     'id': fields.Integer,
@@ -31,28 +29,20 @@ parser.add_argument('text', type=str, required=True)
 parser.add_argument('status', type=str, required=True)
 
 
-class Solution:
-    # TODO: Написать сериализацию в JSON
-    def __init__(self, args):
-        print(args)
-        self.id = 0,
-        self.task_id = args['task_id']
-        self.student_id = args['student_id']
-        self.status = 'Q'
-        self.text = args['text']
-        self.mark = 0
-        self.enqueued_at = datetime.now()
-        self.processed_at = None
-
 
 class SolutionApi(Resource):
     parser = reqparse.RequestParser()
 
     @api_key_required
     def get(self, obj_id):
-        # Запросить из Celery решение
-        res = {}
-        return marshal(res, self.fields)
+        res = process_solution.AsyncResult(obj_id)
+        print(dir(res))
+        return {
+            'id': res.id,
+            'status': res.status,
+            'ready': res.ready(),
+            'result': res.result,
+        }
 
 
 class SolutionListApi(Resource):
@@ -75,5 +65,5 @@ class SolutionListApi(Resource):
         args = parser.parse_args()
         # Создать решение в Celery
         solution = Solution(args)
-        res = process_solution.delay(solution)
-        return marshal({'ok': True}, self.fields)
+        res = process_solution.delay(solution.to_dict())
+        return {'id': res.id}
