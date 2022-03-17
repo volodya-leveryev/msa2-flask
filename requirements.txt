@@ -4,3 +4,5 @@ flask-sqlalchemy
 flask-admin
 flask-migrate
 flask-restx
+flask-graphql
+graphene_sqlalchemy

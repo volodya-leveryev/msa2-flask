@@ -1,4 +1,8 @@
 from flask_restx import fields, reqparse
+import graphene
+from graphene import relay
+from graphene_sqlalchemy import SQLAlchemyObjectType, SQLAlchemyConnectionField
+
 from models import db, ObjectApi, ObjectListApi
 
 
@@ -14,6 +18,19 @@ class Student(db.Model):
         if self.second_name:
             res += ' ' + self.second_name[0] + '.'
         return res
+
+
+class StudentSchema(SQLAlchemyObjectType):
+    class Meta:
+        model = Student
+        interfaces = (relay.Node,)
+
+
+class Query(graphene.ObjectType):
+    node = relay.Node.Field()
+    all_students = SQLAlchemyConnectionField(StudentSchema.connection, sort=None)
+
+schema = graphene.Schema(query=Query)
 
 
 fields = {

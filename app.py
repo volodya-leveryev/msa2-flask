@@ -2,8 +2,10 @@ from flask import Flask
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_migrate import Migrate
+from flask_graphql import GraphQLView
 
 from models import api, db, course, students, task, solution
+from models.students import schema
 
 
 def get_secret_key():
@@ -37,3 +39,12 @@ api.add_resource(task.TaskApi, '/task/<int:obj_id>/')
 api.add_resource(task.TaskListApi, '/task/')
 api.add_resource(solution.SolutionApi, '/solutions/<string:obj_id>/')
 api.add_resource(solution.SolutionListApi, '/solutions/')
+
+app.add_url_rule(
+    '/graphql',
+    view_func=GraphQLView.as_view(
+        'graphql',
+        schema=schema,
+        graphiql=True # for having the GraphiQL interface
+    )
+)
